@@ -1,0 +1,744 @@
+kind: DataConnectorLink
+version: v1
+definition:
+  name: mypostgres
+  url:
+    readWriteUrls:
+      read:
+        valueFromEnv: APP_MYPOSTGRES_READ_URL
+      write:
+        valueFromEnv: APP_MYPOSTGRES_WRITE_URL
+  headers:
+    Authorization:
+      valueFromEnv: APP_MYPOSTGRES_AUTHORIZATION_HEADER
+  schema:
+    version: v0.1
+    schema:
+      collections:
+        - arguments: {}
+          foreign_keys: {}
+          name: users
+          type: users
+          uniqueness_constraints:
+            users_pkey:
+              unique_columns:
+                - id
+      functions: []
+      object_types:
+        delete_users_by_id_response:
+          description: Responses from the 'delete_users_by_id' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                name: int4
+                type: named
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                element_type:
+                  name: users
+                  type: named
+                type: array
+        insert_users_object:
+          fields:
+            age:
+              type:
+                name: int4
+                type: named
+            id:
+              type:
+                type: nullable
+                underlying_type:
+                  name: int4
+                  type: named
+            name:
+              type:
+                name: varchar
+                type: named
+        insert_users_response:
+          description: Responses from the 'insert_users' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                name: int4
+                type: named
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                element_type:
+                  name: users
+                  type: named
+                type: array
+        update_column_users_age:
+          description: Update the 'age' column in the 'users' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                name: int4
+                type: named
+        update_column_users_id:
+          description: Update the 'id' column in the 'users' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                name: int4
+                type: named
+        update_column_users_name:
+          description: Update the 'name' column in the 'users' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                name: varchar
+                type: named
+        update_users_by_id_response:
+          description: Responses from the 'update_users_by_id' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                name: int4
+                type: named
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                element_type:
+                  name: users
+                  type: named
+                type: array
+        update_users_by_id_update_columns:
+          description: Update the columns of the 'users' collection
+          fields:
+            age:
+              description: Update the 'age' column in the 'users' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  name: update_column_users_age
+                  type: named
+            id:
+              description: Update the 'id' column in the 'users' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  name: update_column_users_id
+                  type: named
+            name:
+              description: Update the 'name' column in the 'users' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  name: update_column_users_name
+                  type: named
+        users:
+          fields:
+            age:
+              type:
+                name: int4
+                type: named
+            id:
+              type:
+                name: int4
+                type: named
+            name:
+              type:
+                name: varchar
+                type: named
+      procedures:
+        - arguments:
+            key_id:
+              type:
+                name: int4
+                type: named
+            pre_check:
+              description: Delete permission predicate over the 'users' collection
+              type:
+                type: nullable
+                underlying_type:
+                  object_type_name: users
+                  type: predicate
+          description: Delete any row on the 'users' collection using the 'id' key
+          name: delete_users_by_id
+          result_type:
+            name: delete_users_by_id_response
+            type: named
+        - arguments:
+            objects:
+              type:
+                element_type:
+                  name: insert_users_object
+                  type: named
+                type: array
+            post_check:
+              description: Insert permission predicate over the 'users' collection
+              type:
+                type: nullable
+                underlying_type:
+                  object_type_name: users
+                  type: predicate
+          description: Insert into the users table
+          name: insert_users
+          result_type:
+            name: insert_users_response
+            type: named
+        - arguments:
+            key_id:
+              type:
+                name: int4
+                type: named
+            post_check:
+              description: Update permission post-condition predicate over the 'users' collection
+              type:
+                type: nullable
+                underlying_type:
+                  object_type_name: users
+                  type: predicate
+            pre_check:
+              description: Update permission pre-condition predicate over the 'users' collection
+              type:
+                type: nullable
+                underlying_type:
+                  object_type_name: users
+                  type: predicate
+            update_columns:
+              type:
+                name: update_users_by_id_update_columns
+                type: named
+          description: Update any row on the 'users' collection using the 'id' key
+          name: update_users_by_id
+          result_type:
+            name: update_users_by_id_response
+            type: named
+      scalar_types:
+        int4:
+          aggregate_functions:
+            avg:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+            bit_and:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: int4
+                  type: named
+            bit_or:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: int4
+                  type: named
+            bit_xor:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: int4
+                  type: named
+            max:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: int4
+                  type: named
+            min:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: int4
+                  type: named
+            stddev:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+            stddev_pop:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+            stddev_samp:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+            sum:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: int8
+                  type: named
+            var_pop:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+            var_samp:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+            variance:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              argument_type:
+                name: int4
+                type: named
+              type: custom
+            _gte:
+              argument_type:
+                name: int4
+                type: named
+              type: custom
+            _in:
+              type: in
+            _lt:
+              argument_type:
+                name: int4
+                type: named
+              type: custom
+            _lte:
+              argument_type:
+                name: int4
+                type: named
+              type: custom
+            _neq:
+              argument_type:
+                name: int4
+                type: named
+              type: custom
+          representation:
+            type: int32
+        int8:
+          aggregate_functions:
+            avg:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+            bit_and:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: int8
+                  type: named
+            bit_or:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: int8
+                  type: named
+            bit_xor:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: int8
+                  type: named
+            max:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: int8
+                  type: named
+            min:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: int8
+                  type: named
+            stddev:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+            stddev_pop:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+            stddev_samp:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+            sum:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+            var_pop:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+            var_samp:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+            variance:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              argument_type:
+                name: int8
+                type: named
+              type: custom
+            _gte:
+              argument_type:
+                name: int8
+                type: named
+              type: custom
+            _in:
+              type: in
+            _lt:
+              argument_type:
+                name: int8
+                type: named
+              type: custom
+            _lte:
+              argument_type:
+                name: int8
+                type: named
+              type: custom
+            _neq:
+              argument_type:
+                name: int8
+                type: named
+              type: custom
+          representation:
+            type: int64
+        numeric:
+          aggregate_functions:
+            avg:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+            max:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+            min:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+            stddev:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+            stddev_pop:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+            stddev_samp:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+            sum:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+            var_pop:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+            var_samp:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+            variance:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: numeric
+                  type: named
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              argument_type:
+                name: numeric
+                type: named
+              type: custom
+            _gte:
+              argument_type:
+                name: numeric
+                type: named
+              type: custom
+            _in:
+              type: in
+            _lt:
+              argument_type:
+                name: numeric
+                type: named
+              type: custom
+            _lte:
+              argument_type:
+                name: numeric
+                type: named
+              type: custom
+            _neq:
+              argument_type:
+                name: numeric
+                type: named
+              type: custom
+          representation:
+            type: bigdecimal
+        text:
+          aggregate_functions:
+            max:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            min:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              argument_type:
+                name: text
+                type: named
+              type: custom
+            _gte:
+              argument_type:
+                name: text
+                type: named
+              type: custom
+            _ilike:
+              argument_type:
+                name: text
+                type: named
+              type: custom
+            _in:
+              type: in
+            _iregex:
+              argument_type:
+                name: text
+                type: named
+              type: custom
+            _like:
+              argument_type:
+                name: text
+                type: named
+              type: custom
+            _lt:
+              argument_type:
+                name: text
+                type: named
+              type: custom
+            _lte:
+              argument_type:
+                name: text
+                type: named
+              type: custom
+            _neq:
+              argument_type:
+                name: text
+                type: named
+              type: custom
+            _nilike:
+              argument_type:
+                name: text
+                type: named
+              type: custom
+            _niregex:
+              argument_type:
+                name: text
+                type: named
+              type: custom
+            _nlike:
+              argument_type:
+                name: text
+                type: named
+              type: custom
+            _nregex:
+              argument_type:
+                name: text
+                type: named
+              type: custom
+            _regex:
+              argument_type:
+                name: text
+                type: named
+              type: custom
+            starts_with:
+              argument_type:
+                name: text
+                type: named
+              type: custom
+            ts_match_tt:
+              argument_type:
+                name: text
+                type: named
+              type: custom
+          representation:
+            type: string
+        varchar:
+          aggregate_functions:
+            max:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+            min:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: text
+                  type: named
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              argument_type:
+                name: varchar
+                type: named
+              type: custom
+            _gte:
+              argument_type:
+                name: varchar
+                type: named
+              type: custom
+            _ilike:
+              argument_type:
+                name: varchar
+                type: named
+              type: custom
+            _in:
+              type: in
+            _iregex:
+              argument_type:
+                name: varchar
+                type: named
+              type: custom
+            _like:
+              argument_type:
+                name: varchar
+                type: named
+              type: custom
+            _lt:
+              argument_type:
+                name: varchar
+                type: named
+              type: custom
+            _lte:
+              argument_type:
+                name: varchar
+                type: named
+              type: custom
+            _neq:
+              argument_type:
+                name: varchar
+                type: named
+              type: custom
+            _nilike:
+              argument_type:
+                name: varchar
+                type: named
+              type: custom
+            _niregex:
+              argument_type:
+                name: varchar
+                type: named
+              type: custom
+            _nlike:
+              argument_type:
+                name: varchar
+                type: named
+              type: custom
+            _nregex:
+              argument_type:
+                name: varchar
+                type: named
+              type: custom
+            _regex:
+              argument_type:
+                name: varchar
+                type: named
+              type: custom
+            starts_with:
+              argument_type:
+                name: varchar
+                type: named
+              type: custom
+            ts_match_tt:
+              argument_type:
+                name: varchar
+                type: named
+              type: custom
+          representation:
+            type: string
+    capabilities:
+      capabilities:
+        mutation:
+          explain: {}
+          transactional: {}
+        query:
+          aggregates: {}
+          exists:
+            nested_collections: {}
+          explain: {}
+          nested_fields:
+            filter_by: {}
+            order_by: {}
+          variables: {}
+        relationships:
+          order_by_aggregate: {}
+          relation_comparisons: {}
+      version: 0.1.6
