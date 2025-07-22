@@ -17,6 +17,14 @@ definition:
       collections:
         - arguments: {}
           foreign_keys: {}
+          name: todos
+          type: todos
+          uniqueness_constraints:
+            todos_pkey:
+              unique_columns:
+                - id
+        - arguments: {}
+          foreign_keys: {}
           name: users
           type: users
           uniqueness_constraints:
@@ -25,6 +33,21 @@ definition:
                 - id
       functions: []
       object_types:
+        delete_todos_by_id_response:
+          description: Responses from the 'delete_todos_by_id' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                name: int4
+                type: named
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                element_type:
+                  name: todos
+                  type: named
+                type: array
         delete_users_by_id_response:
           description: Responses from the 'delete_users_by_id' procedure
           fields:
@@ -40,6 +63,45 @@ definition:
                   name: users
                   type: named
                 type: array
+        insert_todos_object:
+          fields:
+            desc:
+              type:
+                name: varchar
+                type: named
+            id:
+              type:
+                type: nullable
+                underlying_type:
+                  name: int8
+                  type: named
+            is_completed:
+              type:
+                name: bool
+                type: named
+            title:
+              type:
+                name: varchar
+                type: named
+            user_id:
+              type:
+                name: int8
+                type: named
+        insert_todos_response:
+          description: Responses from the 'insert_todos' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                name: int4
+                type: named
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                element_type:
+                  name: todos
+                  type: named
+                type: array
         insert_users_object:
           fields:
             age:
@@ -51,6 +113,12 @@ definition:
                 type: nullable
                 underlying_type:
                   name: int4
+                  type: named
+            mobile_no:
+              type:
+                type: nullable
+                underlying_type:
+                  name: varchar
                   type: named
             name:
               type:
@@ -71,6 +139,68 @@ definition:
                   name: users
                   type: named
                 type: array
+        todos:
+          fields:
+            desc:
+              type:
+                name: varchar
+                type: named
+            id:
+              type:
+                name: int8
+                type: named
+            is_completed:
+              type:
+                name: bool
+                type: named
+            title:
+              type:
+                name: varchar
+                type: named
+            user_id:
+              type:
+                name: int8
+                type: named
+        update_column_todos_desc:
+          description: Update the 'desc' column in the 'todos' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                name: varchar
+                type: named
+        update_column_todos_id:
+          description: Update the 'id' column in the 'todos' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                name: int8
+                type: named
+        update_column_todos_is_completed:
+          description: Update the 'is_completed' column in the 'todos' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                name: bool
+                type: named
+        update_column_todos_title:
+          description: Update the 'title' column in the 'todos' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                name: varchar
+                type: named
+        update_column_todos_user_id:
+          description: Update the 'user_id' column in the 'todos' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                name: int8
+                type: named
         update_column_users_age:
           description: Update the 'age' column in the 'users' collection
           fields:
@@ -87,6 +217,16 @@ definition:
               type:
                 name: int4
                 type: named
+        update_column_users_mobile_no:
+          description: Update the 'mobile_no' column in the 'users' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: nullable
+                underlying_type:
+                  name: varchar
+                  type: named
         update_column_users_name:
           description: Update the 'name' column in the 'users' collection
           fields:
@@ -95,6 +235,59 @@ definition:
               type:
                 name: varchar
                 type: named
+        update_todos_by_id_response:
+          description: Responses from the 'update_todos_by_id' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                name: int4
+                type: named
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                element_type:
+                  name: todos
+                  type: named
+                type: array
+        update_todos_by_id_update_columns:
+          description: Update the columns of the 'todos' collection
+          fields:
+            desc:
+              description: Update the 'desc' column in the 'todos' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  name: update_column_todos_desc
+                  type: named
+            id:
+              description: Update the 'id' column in the 'todos' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  name: update_column_todos_id
+                  type: named
+            is_completed:
+              description: Update the 'is_completed' column in the 'todos' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  name: update_column_todos_is_completed
+                  type: named
+            title:
+              description: Update the 'title' column in the 'todos' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  name: update_column_todos_title
+                  type: named
+            user_id:
+              description: Update the 'user_id' column in the 'todos' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  name: update_column_todos_user_id
+                  type: named
         update_users_by_id_response:
           description: Responses from the 'update_users_by_id' procedure
           fields:
@@ -127,6 +320,13 @@ definition:
                 underlying_type:
                   name: update_column_users_id
                   type: named
+            mobile_no:
+              description: Update the 'mobile_no' column in the 'users' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  name: update_column_users_mobile_no
+                  type: named
             name:
               description: Update the 'name' column in the 'users' collection.
               type:
@@ -144,11 +344,34 @@ definition:
               type:
                 name: int4
                 type: named
+            mobile_no:
+              type:
+                type: nullable
+                underlying_type:
+                  name: varchar
+                  type: named
             name:
               type:
                 name: varchar
                 type: named
       procedures:
+        - arguments:
+            key_id:
+              type:
+                name: int8
+                type: named
+            pre_check:
+              description: Delete permission predicate over the 'todos' collection
+              type:
+                type: nullable
+                underlying_type:
+                  object_type_name: todos
+                  type: predicate
+          description: Delete any row on the 'todos' collection using the 'id' key
+          name: delete_todos_by_id
+          result_type:
+            name: delete_todos_by_id_response
+            type: named
         - arguments:
             key_id:
               type:
@@ -170,6 +393,25 @@ definition:
             objects:
               type:
                 element_type:
+                  name: insert_todos_object
+                  type: named
+                type: array
+            post_check:
+              description: Insert permission predicate over the 'todos' collection
+              type:
+                type: nullable
+                underlying_type:
+                  object_type_name: todos
+                  type: predicate
+          description: Insert into the todos table
+          name: insert_todos
+          result_type:
+            name: insert_todos_response
+            type: named
+        - arguments:
+            objects:
+              type:
+                element_type:
                   name: insert_users_object
                   type: named
                 type: array
@@ -184,6 +426,34 @@ definition:
           name: insert_users
           result_type:
             name: insert_users_response
+            type: named
+        - arguments:
+            key_id:
+              type:
+                name: int8
+                type: named
+            post_check:
+              description: Update permission post-condition predicate over the 'todos' collection
+              type:
+                type: nullable
+                underlying_type:
+                  object_type_name: todos
+                  type: predicate
+            pre_check:
+              description: Update permission pre-condition predicate over the 'todos' collection
+              type:
+                type: nullable
+                underlying_type:
+                  object_type_name: todos
+                  type: predicate
+            update_columns:
+              type:
+                name: update_todos_by_id_update_columns
+                type: named
+          description: Update any row on the 'todos' collection using the 'id' key
+          name: update_todos_by_id
+          result_type:
+            name: update_todos_by_id_response
             type: named
         - arguments:
             key_id:
@@ -214,6 +484,58 @@ definition:
             name: update_users_by_id_response
             type: named
       scalar_types:
+        bool:
+          aggregate_functions:
+            bool_and:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: bool
+                  type: named
+            bool_or:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: bool
+                  type: named
+            every:
+              result_type:
+                type: nullable
+                underlying_type:
+                  name: bool
+                  type: named
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              argument_type:
+                name: bool
+                type: named
+              type: custom
+            _gte:
+              argument_type:
+                name: bool
+                type: named
+              type: custom
+            _in:
+              type: in
+            _lt:
+              argument_type:
+                name: bool
+                type: named
+              type: custom
+            _lte:
+              argument_type:
+                name: bool
+                type: named
+              type: custom
+            _neq:
+              argument_type:
+                name: bool
+                type: named
+              type: custom
+          representation:
+            type: boolean
         int4:
           aggregate_functions:
             avg:

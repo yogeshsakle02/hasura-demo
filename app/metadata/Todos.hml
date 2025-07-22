@@ -1,0 +1,168 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: Todos
+  fields:
+    - name: desc
+      type: String_1!
+    - name: id
+      type: Int64!
+    - name: isCompleted
+      type: Boolean_1!
+    - name: title
+      type: String_1!
+    - name: userId
+      type: Int64!
+  graphql:
+    typeName: Todos
+    inputTypeName: TodosInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: mypostgres
+      dataConnectorObjectType: todos
+      fieldMapping:
+        desc:
+          column:
+            name: desc
+        id:
+          column:
+            name: id
+        isCompleted:
+          column:
+            name: is_completed
+        title:
+          column:
+            name: title
+        userId:
+          column:
+            name: user_id
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: Todos
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - desc
+          - id
+          - isCompleted
+          - title
+          - userId
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: TodosBoolExp
+  operand:
+    object:
+      type: Todos
+      comparableFields:
+        - fieldName: desc
+          booleanExpressionType: VarcharBoolExp
+        - fieldName: id
+          booleanExpressionType: Int8BoolExp
+        - fieldName: isCompleted
+          booleanExpressionType: BoolBoolExp
+        - fieldName: title
+          booleanExpressionType: VarcharBoolExp
+        - fieldName: userId
+          booleanExpressionType: Int8BoolExp
+      comparableRelationships: []
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: TodosBoolExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: TodosAggExp
+  operand:
+    object:
+      aggregatedType: Todos
+      aggregatableFields:
+        - fieldName: desc
+          aggregateExpression: VarcharAggExp
+        - fieldName: id
+          aggregateExpression: Int8AggExp
+        - fieldName: isCompleted
+          aggregateExpression: BoolAggExp
+        - fieldName: title
+          aggregateExpression: VarcharAggExp
+        - fieldName: userId
+          aggregateExpression: Int8AggExp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: TodosAggExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: TodosOrderByExp
+  operand:
+    object:
+      orderedType: Todos
+      orderableFields:
+        - fieldName: desc
+          orderByExpression: String1OrderByExp
+        - fieldName: id
+          orderByExpression: Int64OrderByExp
+        - fieldName: isCompleted
+          orderByExpression: Boolean1OrderByExp
+        - fieldName: title
+          orderByExpression: String1OrderByExp
+        - fieldName: userId
+          orderByExpression: Int64OrderByExp
+      orderableRelationships: []
+  graphql:
+    expressionTypeName: TodosOrderByExp
+
+---
+kind: Model
+version: v2
+definition:
+  name: Todos
+  objectType: Todos
+  source:
+    dataConnectorName: mypostgres
+    collection: todos
+  filterExpressionType: TodosBoolExp
+  aggregateExpression: TodosAggExp
+  orderByExpression: TodosOrderByExp
+  graphql:
+    selectMany:
+      queryRootField: todos
+      subscription:
+        rootField: todos
+    selectUniques:
+      - queryRootField: todosById
+        uniqueIdentifier:
+          - id
+        subscription:
+          rootField: todosById
+    filterInputTypeName: TodosFilterInput
+    aggregate:
+      queryRootField: todosAggregate
+      subscription:
+        rootField: todosAggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: Todos
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+

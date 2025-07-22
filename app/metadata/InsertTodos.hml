@@ -2,69 +2,75 @@
 kind: ObjectType
 version: v1
 definition:
-  name: InsertUsersObject
+  name: InsertTodosObject
   fields:
-    - name: age
-      type: Int32!
-    - name: id
-      type: Int32
-    - name: name
+    - name: desc
       type: String_1!
-    - name: mobileNo
-      type: String_1
+    - name: id
+      type: Int64
+    - name: isCompleted
+      type: Boolean_1!
+    - name: title
+      type: String_1!
+    - name: userId
+      type: Int64!
   graphql:
-    typeName: InsertUsersObject
-    inputTypeName: InsertUsersObjectInput
+    typeName: InsertTodosObject
+    inputTypeName: InsertTodosObjectInput
   dataConnectorTypeMapping:
     - dataConnectorName: mypostgres
-      dataConnectorObjectType: insert_users_object
+      dataConnectorObjectType: insert_todos_object
       fieldMapping:
-        age:
+        desc:
           column:
-            name: age
+            name: desc
         id:
           column:
             name: id
-        mobileNo:
+        isCompleted:
           column:
-            name: mobile_no
-        name:
+            name: is_completed
+        title:
           column:
-            name: name
+            name: title
+        userId:
+          column:
+            name: user_id
 
 ---
 kind: TypePermissions
 version: v1
 definition:
-  typeName: InsertUsersObject
+  typeName: InsertTodosObject
   permissions:
     - role: admin
       output:
         allowedFields:
-          - age
+          - desc
           - id
-          - name
-          - mobileNo
+          - isCompleted
+          - title
+          - userId
 
 ---
 kind: ObjectType
 version: v1
 definition:
-  name: InsertUsersResponse
-  description: Responses from the 'insert_users' procedure
+  name: InsertTodosResponse
+  description: Responses from the 'insert_todos' procedure
   fields:
     - name: affectedRows
       type: Int32!
       description: The number of rows affected by the mutation
     - name: returning
-      type: "[Users!]!"
+      type: "[Todos!]!"
       description: Data from rows affected by the mutation
   graphql:
-    typeName: InsertUsersResponse
-    inputTypeName: InsertUsersResponseInput
+    typeName: InsertTodosResponse
+    inputTypeName: InsertTodosResponseInput
   dataConnectorTypeMapping:
     - dataConnectorName: mypostgres
-      dataConnectorObjectType: insert_users_response
+      dataConnectorObjectType: insert_todos_response
       fieldMapping:
         affectedRows:
           column:
@@ -77,7 +83,7 @@ definition:
 kind: TypePermissions
 version: v1
 definition:
-  typeName: InsertUsersResponse
+  typeName: InsertTodosResponse
   permissions:
     - role: admin
       output:
@@ -89,31 +95,31 @@ definition:
 kind: Command
 version: v1
 definition:
-  name: InsertUsers
-  outputType: InsertUsersResponse!
+  name: InsertTodos
+  outputType: InsertTodosResponse!
   arguments:
     - name: objects
-      type: "[InsertUsersObject!]!"
+      type: "[InsertTodosObject!]!"
     - name: postCheck
-      type: UsersBoolExp
-      description: Insert permission predicate over the 'users' collection
+      type: TodosBoolExp
+      description: Insert permission predicate over the 'todos' collection
   source:
     dataConnectorName: mypostgres
     dataConnectorCommand:
-      procedure: insert_users
+      procedure: insert_todos
     argumentMapping:
       objects: objects
       postCheck: post_check
   graphql:
-    rootFieldName: insertUsers
+    rootFieldName: insertTodos
     rootFieldKind: Mutation
-  description: Insert into the users table
+  description: Insert into the todos table
 
 ---
 kind: CommandPermissions
 version: v1
 definition:
-  commandName: InsertUsers
+  commandName: InsertTodos
   permissions:
     - role: admin
       allowExecution: true

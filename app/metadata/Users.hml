@@ -10,12 +10,27 @@ definition:
       type: Int32!
     - name: name
       type: String_1!
+    - name: mobileNo
+      type: String_1
   graphql:
     typeName: Users
     inputTypeName: UsersInput
   dataConnectorTypeMapping:
     - dataConnectorName: mypostgres
       dataConnectorObjectType: users
+      fieldMapping:
+        age:
+          column:
+            name: age
+        id:
+          column:
+            name: id
+        mobileNo:
+          column:
+            name: mobile_no
+        name:
+          column:
+            name: name
 
 ---
 kind: TypePermissions
@@ -29,6 +44,7 @@ definition:
           - age
           - id
           - name
+          - mobileNo
 
 ---
 kind: BooleanExpressionType
@@ -44,6 +60,8 @@ definition:
         - fieldName: id
           booleanExpressionType: Int4BoolExp
         - fieldName: name
+          booleanExpressionType: VarcharBoolExp
+        - fieldName: mobileNo
           booleanExpressionType: VarcharBoolExp
       comparableRelationships: []
   logicalOperators:
@@ -68,6 +86,8 @@ definition:
           aggregateExpression: Int4AggExp
         - fieldName: name
           aggregateExpression: VarcharAggExp
+        - fieldName: mobileNo
+          aggregateExpression: VarcharAggExp
   count:
     enable: true
   graphql:
@@ -87,6 +107,8 @@ definition:
         - fieldName: id
           orderByExpression: Int32OrderByExp
         - fieldName: name
+          orderByExpression: String1OrderByExp
+        - fieldName: mobileNo
           orderByExpression: String1OrderByExp
       orderableRelationships: []
   graphql:

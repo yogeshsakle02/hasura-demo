@@ -1,0 +1,72 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: DeleteTodosByIdResponse
+  description: Responses from the 'delete_todos_by_id' procedure
+  fields:
+    - name: affectedRows
+      type: Int32!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[Todos!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: DeleteTodosByIdResponse
+    inputTypeName: DeleteTodosByIdResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: mypostgres
+      dataConnectorObjectType: delete_todos_by_id_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: DeleteTodosByIdResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: DeleteTodosById
+  outputType: DeleteTodosByIdResponse!
+  arguments:
+    - name: keyId
+      type: Int64!
+    - name: preCheck
+      type: TodosBoolExp
+      description: Delete permission predicate over the 'todos' collection
+  source:
+    dataConnectorName: mypostgres
+    dataConnectorCommand:
+      procedure: delete_todos_by_id
+    argumentMapping:
+      keyId: key_id
+      preCheck: pre_check
+  graphql:
+    rootFieldName: deleteTodosById
+    rootFieldKind: Mutation
+  description: Delete any row on the 'todos' collection using the 'id' key
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: DeleteTodosById
+  permissions:
+    - role: admin
+      allowExecution: true
+
