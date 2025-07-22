@@ -91,7 +91,18 @@ definition:
                 name: String
                 type: named
           foreign_keys: {}
-      procedures: []
+      procedures:
+        - arguments:
+            name:
+              type:
+                type: nullable
+                underlying_type:
+                  name: String
+                  type: named
+          name: hi
+          result_type:
+            name: String
+            type: named
       scalar_types:
         Boolean:
           aggregate_functions: {}
