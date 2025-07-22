@@ -1,0 +1,26 @@
+---
+kind: Command
+version: v1
+definition:
+  name: Hi
+  outputType: String!
+  arguments:
+    - name: name
+      type: String
+  source:
+    dataConnectorName: my_ts
+    dataConnectorCommand:
+      procedure: hi
+  graphql:
+    rootFieldName: hi
+    rootFieldKind: Mutation
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: Hi
+  permissions:
+    - role: admin
+      allowExecution: true
+
