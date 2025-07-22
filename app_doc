@@ -1,0 +1,3 @@
+psql -U user -h localhost -d dev -p 6258
+
+postgres://user:password@localhost:6258/dev
