@@ -5,7 +5,7 @@ export function hello(name?: string) {
   return `hello ${name ?? "world"}`;
 }
 
-
+// This is goes as mutation.
 export function hi(name?: string) {
   return `hi ${name ?? "world"}`;
 }
