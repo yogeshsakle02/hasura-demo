@@ -27,8 +27,6 @@ definition:
           result_type:
             name: String
             type: named
-      object_types: {}
-      procedures:
         - arguments:
             name:
               type:
@@ -36,11 +34,86 @@ definition:
                 underlying_type:
                   name: String
                   type: named
-          name: hi
+          name: userInfo
           result_type:
-            name: String
+            name: userInfo_output
             type: named
+      object_types:
+        array:
+          fields:
+            addressType:
+              type:
+                name: String
+                type: named
+            area:
+              type:
+                name: String
+                type: named
+            homeAddress:
+              type:
+                name: String
+                type: named
+            houseNo:
+              type:
+                name: Float
+                type: named
+          foreign_keys: {}
+        userInfo_output:
+          fields:
+            address:
+              type:
+                element_type:
+                  name: array
+                  type: named
+                type: array
+            age:
+              type:
+                name: Float
+                type: named
+            dob:
+              type:
+                name: DateTime
+                type: named
+            email:
+              type:
+                name: String
+                type: named
+            isMarried:
+              type:
+                name: Boolean
+                type: named
+            mobileNo:
+              type:
+                name: Float
+                type: named
+            name:
+              type:
+                name: String
+                type: named
+          foreign_keys: {}
+      procedures: []
       scalar_types:
+        Boolean:
+          aggregate_functions: {}
+          comparison_operators:
+            _eq:
+              type: equal
+          representation:
+            type: boolean
+        DateTime:
+          aggregate_functions: {}
+          comparison_operators:
+            _eq:
+              type: equal
+          representation:
+            type: timestamp
+        Float:
+          aggregate_functions: {}
+          comparison_operators:
+            _eq:
+              type: equal
+          representation:
+            type: float64
         String:
           aggregate_functions: {}
           comparison_operators:

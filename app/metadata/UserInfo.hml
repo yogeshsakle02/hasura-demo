@@ -1,0 +1,105 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: Array
+  fields:
+    - name: addressType
+      type: String!
+    - name: area
+      type: String!
+    - name: homeAddress
+      type: String!
+    - name: houseNo
+      type: Float!
+  graphql:
+    typeName: Array
+    inputTypeName: ArrayInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: my_ts
+      dataConnectorObjectType: array
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: Array
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - addressType
+          - area
+          - homeAddress
+          - houseNo
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UserInfoOutput
+  fields:
+    - name: address
+      type: "[Array!]!"
+    - name: age
+      type: Float!
+    - name: dob
+      type: Timestamp!
+    - name: email
+      type: String!
+    - name: isMarried
+      type: Boolean!
+    - name: mobileNo
+      type: Float!
+    - name: name
+      type: String!
+  graphql:
+    typeName: UserInfoOutput
+    inputTypeName: UserInfoOutputInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: my_ts
+      dataConnectorObjectType: userInfo_output
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UserInfoOutput
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - address
+          - age
+          - dob
+          - email
+          - isMarried
+          - mobileNo
+          - name
+
+---
+kind: Command
+version: v1
+definition:
+  name: UserInfo
+  outputType: UserInfoOutput!
+  arguments:
+    - name: name
+      type: String
+  source:
+    dataConnectorName: my_ts
+    dataConnectorCommand:
+      function: userInfo
+  graphql:
+    rootFieldName: userInfo
+    rootFieldKind: Query
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: UserInfo
+  permissions:
+    - role: admin
+      allowExecution: true
+
