@@ -4,3 +4,8 @@
 export function hello(name?: string) {
   return `hello ${name ?? "world"}`;
 }
+
+
+export function hi(name?: string) {
+  return `hi ${name ?? "world"}`;
+}
